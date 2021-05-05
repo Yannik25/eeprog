@@ -1,0 +1,4 @@
+make
+make install
+
+writeeepromcontent | eeprog -16 -w 0 /dev/i2c-2 0x51
