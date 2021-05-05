@@ -146,9 +146,8 @@ int write_to_eeprom(struct eeprom *e, int addr, int timeout)
 {
 	
 	for(u_int i=0;i<sizeof(array);i++) {
-		printf("writing %x ",array[i]);
 		print_info(".");
-		//fflush(stdout);
+		fflush(stdout);
 		die_if(eeprom_write_byte(e, addr++, array[i]), "write error");
 		die_if(eeprom_wait_ready(e, timeout), "write timeout");
 	}
@@ -272,7 +271,6 @@ int main(int argc, char** argv)
 		u_int i = 0;
 		while(ptr != NULL) {
 			array[i] = (unsigned char)strtol(ptr, NULL, 16);
-			printf("array content: %x ",array[i]);
 			i++;
 			ptr = strtok(NULL, delimiter);
 		}
