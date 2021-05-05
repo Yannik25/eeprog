@@ -10,3 +10,10 @@ Use -8 switch for EEPROM smaller then 24C16 (8bit addressing mode).
 Again, it's really important that you read the WARNING file.
 
 Type "make" to compile.
+make install
+
+cd writecontent
+make
+make install
+
+writeeepromcontent | eeprog -16 -w 0 /dev/i2c-2 0x51

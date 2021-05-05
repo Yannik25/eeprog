@@ -24,12 +24,13 @@
 #include <sys/stat.h>
 #include "24cXX.h"
 
-#define VERSION 	"0.7.6"
+#define VERSION 	"0.7.7"
 
 #define ENV_DEV		"EEPROG_DEV"
 #define ENV_I2C_ADDR	"EEPROG_I2C_ADDR"
 
 int g_quiet;
+u_int8_t array[85];
 
 #define usage_if(a) do { do_usage_if( a , __LINE__); } while(0);
 void do_usage_if(int b, int line)
@@ -143,14 +144,15 @@ int read_from_eeprom(struct eeprom *e, int addr, int size, int hex)
 
 int write_to_eeprom(struct eeprom *e, int addr, int timeout)
 {
-	int c;
-	while((c = getchar()) != EOF)
-	{
+	
+	for(u_int i=0;i<sizeof(array);i++) {
+		printf("writing %x ",array[i]);
 		print_info(".");
-		fflush(stdout);
-		die_if(eeprom_write_byte(e, addr++, c), "write error");
+		//fflush(stdout);
+		die_if(eeprom_write_byte(e, addr++, array[i]), "write error");
 		die_if(eeprom_wait_ready(e, timeout), "write timeout");
 	}
+
 	print_info("\n\n");
 	return 0;
 }
@@ -163,7 +165,11 @@ int main(int argc, char** argv)
 	char *device, *arg = 0, *i2c_addr_s;
 	struct stat st;
 	int eeprom_type = 0;
-
+	
+	char str[200];
+	char delimiter[] = ",";
+	char *ptr;
+	
 	op = want_hex = dummy = force = sixteen = 0;
 	g_quiet = 0;
 
@@ -260,6 +266,17 @@ int main(int argc, char** argv)
 		read_from_eeprom(&e, memaddr, size, want_hex);
 		break;
 	case 'w':
+	
+		scanf ("%s",str); 
+		ptr = strtok(str, delimiter);
+		u_int i = 0;
+		while(ptr != NULL) {
+			array[i] = (unsigned char)strtol(ptr, NULL, 16);
+			printf("array content: %x ",array[i]);
+			i++;
+			ptr = strtok(NULL, delimiter);
+		}
+		
 		if(force == 0)
 			confirm_action();
 		parse_arg(arg, &memaddr, &size);

@@ -1,3 +1,6 @@
+05.05.2021, 0.7.7
+	- add programm with content that can be written to eeprom
+	- removed smb bus write quick
 29.02.2004, 0.7.6
 	- better error handling
 	- read_from_eeprom bug fixed, thanks to Marek Michalkiewicz 

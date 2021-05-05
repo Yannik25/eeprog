@@ -60,13 +60,13 @@ static int i2c_write_3b(struct eeprom *e, __u8 buf[3])
 }
 
 
-#define CHECK_I2C_FUNC( var, label ) \
+/*#define CHECK_I2C_FUNC( var, label ) \
 	do { 	if(0 == (var & label)) { \
 		fprintf(stderr, "\nError: " \
 			#label " function is required. Program halted.\n\n"); \
 		exit(1); } \
 	} while(0);
-
+*/
 int eeprom_open(char *dev_fqn, int addr, int type, struct eeprom* e)
 {
 	int funcs, fd, r;
@@ -89,13 +89,13 @@ int eeprom_open(char *dev_fqn, int addr, int type, struct eeprom* e)
 
 
 	// check for req funcs
-	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_QUICK );
+	/*CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_QUICK );
 	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_READ_BYTE );
 	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_WRITE_BYTE );
 	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_READ_BYTE_DATA );
 	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_WRITE_BYTE_DATA );
 	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_READ_WORD_DATA );
-	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_WRITE_WORD_DATA );
+	CHECK_I2C_FUNC( funcs, I2C_FUNC_SMBUS_WRITE_WORD_DATA );*/
 
 	// set working device
 	if( ( r = ioctl(fd, I2C_SLAVE, addr)) < 0)
@@ -190,14 +190,16 @@ int eeprom_write_byte(struct eeprom *e, __u16 mem_addr, __u8 data)
 
 int eeprom_wait_ready(struct eeprom *e, int max_ms_to_wait)
 {
-	while (max_ms_to_wait > 0) {
+	/*while (max_ms_to_wait > 0) {
 		int r = i2c_smbus_write_quick(e->fd, 0);
 		if (r == 0) {
 			return r;
 		}
 		usleep(1000);
 		--max_ms_to_wait;
-	}
-	return -1;
+	}*/
+	usleep(10000);
+	return 0;
+	//return -1;
 }
 
