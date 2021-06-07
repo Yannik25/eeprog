@@ -30,7 +30,7 @@
 #define ENV_I2C_ADDR	"EEPROG_I2C_ADDR"
 
 int g_quiet;
-u_int8_t array[85];
+u_int8_t array[120];
 
 #define usage_if(a) do { do_usage_if( a , __LINE__); } while(0);
 void do_usage_if(int b, int line)
